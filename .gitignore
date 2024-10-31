@@ -1,0 +1,9 @@
+/.DS_Store
+/.venv
+/data
+/hospital_df.csv
+/main_fordoc.ipynb
+/output
+/scripts
+/spc_list.csv
+/thai_administrative.csv

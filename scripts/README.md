@@ -102,7 +102,7 @@ pip install pandas numpy tqdm openpyxl sklearn statsmodels tabulate requests bea
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](HRH/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
 
 ## Authors
 

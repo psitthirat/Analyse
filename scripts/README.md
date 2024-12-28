@@ -21,6 +21,17 @@ This directory contains essential scripts for the HRH project, focusing on data 
    - Process and clean scraped data, saving it in structured CSV format.
    - Automatically generate or update a `readme.txt` file documenting the scraping process.
 
+3. **Data Analysis and Statistical Utility (`analyse.py`)**:
+   - Generate descriptive statistics for categorical and numerical variables.
+   - Perform statistical tests, including:
+     - Chi-square tests.
+     - T-tests.
+     - ANOVA.
+     - Mann-Whitney U tests.
+     - Bootstrapping for significance testing.
+   - Compute coverage and inequality measures like Gini and Theil indices.
+   - Format and export analysis results to Word documents.
+
 ## Usage
 
 ### **Data Processing Utilities (`process.py`)**
@@ -78,6 +89,31 @@ This directory contains essential scripts for the HRH project, focusing on data 
    - The scraped data is saved in `output/spc.csv`.
    - A `readme.txt` file is created in the output directory with details of the scraping process.
 
+### **Data Analysis and Statistical Utility (`analyse.py`)**
+1. **Generate Descriptive Statistics**:
+   ```python
+   from analyse import describe
+   df = pd.DataFrame({
+      'gender': ['Male', 'Female', 'Male'],
+      'age': [25, 30, 35]
+   })
+   describe(df, factors=['gender', 'age'], group_var='gender', table_name="Descriptive Analysis")
+   ```
+
+2. **Calculate Inequity Indices**:
+   - Gini Coefficient:
+      ```Python
+      from analyse import gini
+      result = gini(df, 'resource', 'population')
+      print(result)
+      ```
+   - Theil's T Index:
+      ```Python
+      from analyse import theil_T
+      result = theil_T(df, 'resource', 'population')
+      print(result)
+      ```
+
 ## Dependencies
 
 ### For `process.py`:
@@ -94,6 +130,14 @@ This directory contains essential scripts for the HRH project, focusing on data 
 - requests
 - beautifulsoup4
 - tqdm
+
+### For `analyse.py`:
+- pandas
+- numpy
+- scipy
+- statsmodels
+- sklearn
+- docx
 
 Ensure all dependencies are installed before executing the scripts:
 ```bash

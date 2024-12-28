@@ -97,7 +97,7 @@ This directory contains essential scripts for the HRH project, focusing on data 
 
 Ensure all dependencies are installed before executing the scripts:
 ```bash
-pip install pandas numpy tqdm openpyxl sklearn statsmodels tabulate requests beautifulsoup4
+pip install -r scripts/requirements.txt
 ```
 
 ## License

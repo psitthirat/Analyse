@@ -47,7 +47,6 @@ class DataHandler:
     A class for handling data import and dictionary creation.
     - Importing data
     - Creating the dictionary
-    -
     """
     
     @staticmethod

@@ -1,6 +1,49 @@
+"""
+Specialty Data Scraping Utility
+
+This script contains functionality to scrape specialty-related data from the Thai Ministry of Public Health's health map website and save it as a structured CSV file. It is designed to automate the process of collecting and organizing data for analysis.
+
+Key functionalities include:
+- Scraping specialty data for multiple hospitals using their unique hospital IDs and specialty links.
+- Extracting and processing table data from HTML pages.
+- Detecting and handling missing or incomplete data.
+- Saving results incrementally to avoid data loss during long scraping sessions.
+- Generating a README file with details about the scraping process.
+
+Dependencies:
+- pandas
+- requests
+- BeautifulSoup4
+- tqdm
+- datetime
+- time
+
+Usage:
+1. Prepare input data as pandas DataFrames: `hosp_id` for hospital IDs and `spc_link` for specialty links.
+2. Specify the output folder to save scraped results and log files.
+3. Call the `scrap()` function with the prepared inputs.
+
+Example:
+    from scrp_spc import scrap
+    
+    hosp_id_example = pd.DataFrame({'hosp_id': ['001', '002']})
+    spc_link_example = pd.DataFrame({'link': ['infopersonal', 'infohospital']})
+    output_dir = "./output"
+
+    output_file = scrap(hosp_id_example, spc_link_example, output_dir)
+    print(f"Scraped data is available in: {output_file}")
+
+Authors: P. Sitthirat et al
+Version: 1.0
+License: MIT License
+"""
+
+# Standard library imports
 import os
-import requests
+
+# Third-party library imports
 import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 from datetime import datetime
@@ -18,6 +61,8 @@ def scrap(hosp_id, spc_link, output_folder):
     Returns:
     - str: The path to the saved CSV file.
     """
+    
+    # Create an empty DataFrame to store results
     spc_df = pd.DataFrame()
     N = 1
 
@@ -33,16 +78,12 @@ def scrap(hosp_id, spc_link, output_folder):
                 # Extract the specialty data from URL
                 hosp_url = f"http://gishealth.moph.go.th/healthmap/{row_link['link']}.php?maincode={row_hosp['hosp_id']}"
 
-                if row_link['link'] == 'infopersonal':
-                    n_select = 3
-                    n_table = 5
-                else:
-                    n_select = 2
-                    n_table = 4
+                # Determine table structure based on specialty type
+                n_select, n_table = (3, 5) if row_link['link'] == 'infopersonal' else (2, 4)
                 
+                # Retry mechanism for GET requests
                 success = False
                 while not success:
-                    
                     try:
                         # GET request to the URL with retry mechanism
                         response_hosp = requests.get(hosp_url)
@@ -91,9 +132,8 @@ def scrap(hosp_id, spc_link, output_folder):
 
                         # Choose specialist table
                         spc_table = tables_point[n_table]
-
                     
-                        # Your scraping logic for table goes here
+                        # Extract table data
                         rows = spc_table.find_all('tr')
                         spc = []
                         for row_value in rows:
@@ -141,11 +181,9 @@ def scrap(hosp_id, spc_link, output_folder):
         
             P = (N/len(hosp_id))*100
 
-            # Update progress bar description
+            # Update progress bar and save partial results
             pbar.set_description(f"Progress {N}/{len(hosp_id)} hcode = {row_hosp['hosp_id']}")
             N = N+1
-
-            # Save the DataFrame every 100 hosp_id and delete old file
             if N % 100 == 0:
                 partial_file_path = f'{output_folder}/spc_latest.csv'
                 if os.path.exists(partial_file_path):
@@ -160,11 +198,12 @@ def scrap(hosp_id, spc_link, output_folder):
     if os.path.exists(partial_file_path):
         os.remove(partial_file_path)
 
+    # Save final results
     final_file_path = os.path.join(output_folder, 'spc.csv')
     spc_df.to_csv(final_file_path, index=False)
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    # Update or create the readme.txt file with new scraping information
+    # Update README
     readme_path = os.path.join(output_folder, 'readme.txt')
     with open(readme_path, 'w') as readme_file:
         readme_file.write(f"\n---------------------------------------\n")

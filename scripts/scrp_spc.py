@@ -204,17 +204,32 @@ def scrap(hosp_id, spc_link, output_folder):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     # Update README
-    readme_path = os.path.join(output_folder, 'readme.txt')
-    with open(readme_path, 'w') as readme_file:
-        readme_file.write(f"\n---------------------------------------\n")
-        readme_file.write(f"Specialty Data Scraping\n")
-        readme_file.write(f"Data Source: http://gishealth.moph.go.th/healthmap/\n")
-        readme_file.write(f"Last Updated: {timestamp}\n")
-        readme_file.write(f"\n---------------------------------------\n")
-        readme_file.write(f"Data have been scraped from multiple hospitals and processed into a clean format.\n")
-        readme_file.write(f"The resulting CSV file ('spc.csv') contains data on medical specialties by hospital.\n")
+    readme_path = os.path.join(output_folder, "README.md")
+    with open(readme_path, "w") as readme_file:
+        readme_file.write(f"# Specialty Data Scraping\n\n")
+        readme_file.write(f"**Data Source:** [Thai Ministry of Public Health Health Map](http://gishealth.moph.go.th/healthmap/)\n\n")
+        readme_file.write(f"**Last Updated:** {timestamp}\n\n")
+        readme_file.write(f"## Description\n")
+        readme_file.write(f"This dataset contains medical specialty data scraped from multiple hospitals.\n\n")
+        readme_file.write(f"## 2. Scraping Process\n")
+        readme_file.write(f"### Input Data\n")
+        readme_file.write(f"- **`hosp_id`**: List of hospital codes to scrape. Derived from the healthcare facility dataset.\n")
+        readme_file.write(f"- **`spc_link`**: URLs used for retrieving personal and specialty information.\n")
+        readme_file.write(f"  The scraping process constructs URLs in the following format:\n\n")
+        readme_file.write(f"  ```\n")
+        readme_file.write(f"  http://gishealth.moph.go.th/healthmap/<link>.php?maincode=<hosp_id>\n")
+        readme_file.write(f"  ```\n\n")
+        readme_file.write(f"  - **`infopersonal`**: Workforce dataset (physicians, dentists, nurses, etc.).\n")
+        readme_file.write(f"  - **`infospecialty`, `infospecialty2`, ..., `infospecialty5`**: Medical specialist datasets.\n\n")
+        readme_file.write(f"### Output\n")
+        readme_file.write(f"- Scraped data is saved in `output/scraped/spc.csv`.\n")
+        readme_file.write(f"- A detailed log of the scraping process, including metadata and errors, is saved in `output/scraped/README.md`.\n")
+        readme_file.write(f"## Notes\n")
+        readme_file.write(f"- Partial results are saved every 100 hospitals to prevent data loss.\n")
+        readme_file.write(f"- The script ensures data accuracy by validating each step.\n")
 
     print(f"Scraped data have been successfully saved to '{final_file_path}'\n(Last updated: {timestamp}).")
+    print(f"README updated: '{readme_path}'")
     
     return final_file_path
 

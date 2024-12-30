@@ -38,7 +38,6 @@ This study examines the distribution of medical specialists across Thailand over
 - **`/data`**: Example datasets (anonymized) used in the analysis.
 - **`/scripts`**: Python scripts for data processing, analysis, and visualization.
 - **`/results`**: Outputs including charts, metrics, and statistical summaries.
-- **`/docs`**: Additional documentation and references.
 
 ## Getting Started
 
@@ -65,13 +64,14 @@ This study examines the distribution of medical specialists across Thailand over
 ### Usage
 
 1. Place datasets in the `/data` folder.
-2. Run the analysis script:
+2. Open the main analysis notebook in Jupyter Notebook:
 
    ```bash
-   python scripts/analyze_distribution.py
+   jupyter notebook main.ipynb
    ```
 
-3. Review results in `/results` or use Tableau for further exploration.
+3. Run the cells in `/main.ipynb` to perform the analysis and generate results.
+4. Review results in `/results` or use Tableau for further exploration.
 
 ## Ethical Considerations
 
